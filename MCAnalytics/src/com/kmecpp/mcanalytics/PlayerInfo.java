@@ -19,10 +19,12 @@ public class PlayerInfo {
 		return this.name;
 	}
 
+	@Override
 	public String toString() {
 		return this.uuid.toString() + " : " + this.name;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if ((object instanceof PlayerInfo)) {
 			PlayerInfo playerInfo = (PlayerInfo) object;
@@ -33,6 +35,7 @@ public class PlayerInfo {
 		return false;
 	}
 
+	@Override
 	public int hashCode() {
 		int hashCode = 31 + (this.uuid != null ? this.uuid.hashCode() : 0);
 		hashCode += 31 * (this.uuid != null ? this.name.hashCode() : 0);

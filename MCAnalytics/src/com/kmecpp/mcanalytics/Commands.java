@@ -17,6 +17,7 @@ import com.kmecpp.mcanalytics.util.SQLUtil;
 public class Commands implements CommandExecutor {
 	public final String invalid = ChatColor.RED + "That is not a valid command! Type /stats for a list of commands";
 
+	@Override
 	public boolean onCommand(final CommandSender out, Command cmd, String commandLabel, String[] args) {
 		if ((commandLabel.equalsIgnoreCase("stats")) || (commandLabel.equalsIgnoreCase("mcstats")) || (commandLabel.equalsIgnoreCase("mca")) || (commandLabel.equalsIgnoreCase("mcanalytics"))) {
 			if (args.length == 0) {

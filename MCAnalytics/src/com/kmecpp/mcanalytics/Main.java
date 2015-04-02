@@ -13,6 +13,7 @@ import com.kmecpp.mcanalytics.util.SQLUtil;
 public class Main extends JavaPlugin {
 	public static Main plugin;
 
+	@Override
 	public void onEnable() {
 		plugin = this;
 		saveDefaultConfig();
@@ -39,6 +40,7 @@ public class Main extends JavaPlugin {
 		}, 0L, 1200L);
 	}
 
+	@Override
 	public void onDisable() {
 		Bukkit.broadcastMessage(ChatColor.GREEN + "Finializing MCAnalytics statistics data...");
 		try {

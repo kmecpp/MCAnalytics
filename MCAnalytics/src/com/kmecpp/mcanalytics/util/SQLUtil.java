@@ -14,6 +14,7 @@ import com.kmecpp.mcanalytics.Statistic;
 import com.kmecpp.mcanalytics.Statistic.PlayerStat;
 
 public class SQLUtil {
+
 	public static Long saveStatistics() {
 		try {
 			long startTime = System.currentTimeMillis();
