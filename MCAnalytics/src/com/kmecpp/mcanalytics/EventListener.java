@@ -66,10 +66,9 @@ public class EventListener implements Listener {
 
 	@EventHandler
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e) {
-		String msg = e.getMessage().toLowerCase();
 		String[] commands = { "/r ", "/reply ", "/t", "/tell ", "/m ", "/msg " };
 		for (String command : commands) {
-			if (msg.startsWith(command)) {
+			if (e.getMessage().toLowerCase().startsWith(command.toLowerCase())) {
 				incrementStatistic(Statistic.CHAT_MESSAGES);
 				incrementPlayerStat(e.getPlayer(), Statistic.PlayerStat.CHAT_MESSAGES);
 				break;

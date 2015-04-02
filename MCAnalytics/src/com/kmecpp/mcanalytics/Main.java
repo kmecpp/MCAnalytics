@@ -18,7 +18,7 @@ public class Main extends JavaPlugin {
 		plugin = this;
 		saveDefaultConfig();
 
-		getCommand("statistics").setExecutor(new Commands());
+		getCommand("mcanalytics").setExecutor(new Commands());
 
 		new EventListener();
 

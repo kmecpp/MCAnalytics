@@ -55,27 +55,23 @@ public class SQLUtil {
 		return null;
 	}
 
-	public static LinkedHashMap<Statistic.PlayerStat, Object> getPlayerStatistics(PlayerInfo playerInfo) throws Exception {
-		try {
-			LinkedHashMap<Statistic.PlayerStat, Object> playerStats = new LinkedHashMap<PlayerStat, Object>();
-			Connection connection = getConnection();
-			for (Statistic.PlayerStat statistic : Statistic.PlayerStat.values()) {
-				String getQuery = null;
-				if (playerInfo.getUniqueId() != null) {
-					getQuery = "SELECT UUID," + statistic.toString() + " FROM USERDATA WHERE `UUID`= '" + playerInfo.getUniqueId() + "'";
-				} else if (playerInfo.getName() != null) {
-					getQuery = "SELECT " + Statistic.PlayerStat.PLAYER_NAME.toString() + "," + statistic.toString() + " FROM USERDATA WHERE UPPER(" + Statistic.PlayerStat.PLAYER_NAME.toString() + ")= '" + playerInfo.getName().toUpperCase() + "'";
-				} else {
-					return null;
-				}
-				Object value = connection.createStatement().executeQuery(getQuery).getObject(2);
-				playerStats.put(statistic, value);
+	public static LinkedHashMap<Statistic.PlayerStat, Object> getPlayerStatistics(PlayerInfo playerInfo) throws SQLException {
+		LinkedHashMap<Statistic.PlayerStat, Object> playerStats = new LinkedHashMap<PlayerStat, Object>();
+		Connection connection = getConnection();
+		for (Statistic.PlayerStat statistic : Statistic.PlayerStat.values()) {
+			String getQuery = null;
+			if (playerInfo.getUniqueId() != null) {
+				getQuery = "SELECT UUID," + statistic.toString() + " FROM USERDATA WHERE `UUID`= '" + playerInfo.getUniqueId() + "'";
+			} else if (playerInfo.getName() != null) {
+				getQuery = "SELECT " + Statistic.PlayerStat.PLAYER_NAME.toString() + "," + statistic.toString() + " FROM USERDATA WHERE UPPER(" + Statistic.PlayerStat.PLAYER_NAME.toString() + ")= '" + playerInfo.getName().toUpperCase() + "'";
+			} else {
+				return null;
 			}
-			connection.close();
-			return playerStats;
-		} catch (Exception e) {
-			throw e;
+			Object value = connection.createStatement().executeQuery(getQuery).getObject(2);
+			playerStats.put(statistic, value);
 		}
+		connection.close();
+		return playerStats;
 	}
 
 	public static Connection getConnection() {

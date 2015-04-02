@@ -5,6 +5,6 @@ version: 1.0
 description:
    A Minecraft plugin and php script that collects statistics about a server to be displayed from anywhere
 commands:
-   statistics:
+   mcanalytics:
       description: MCAnalytics base command
-      aliases: [stats, mcstats, mca, mcanalytics]
+      aliases: [stats, mcstats, mca]
