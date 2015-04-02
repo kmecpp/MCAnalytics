@@ -1,0 +1,10 @@
+name: MCAnalytics
+main: com.kmecpp.mcanalytics.Main
+author: kmecpp
+version: 1.0
+description:
+   A Minecraft plugin and php script that collects statistics about a server to be displayed from anywhere
+commands:
+   statistics:
+      description: MCAnalytics base command
+      aliases: [stats, mcstats, mca, mcanalytics]
