@@ -99,8 +99,10 @@ public class EventListener implements Listener {
 		if ((e.getEntity() instanceof Player)) {
 			Player playerKilled = (Player) e.getEntity();
 			incrementStatistic(Statistic.PLAYERS_KILLED);
-			incrementPlayerStat(killer, Statistic.PlayerStat.PLAYERS_KILLED);
 			incrementPlayerStat(playerKilled, Statistic.PlayerStat.DEATHS);
+			if (killer instanceof Player) {
+				incrementPlayerStat(killer, Statistic.PlayerStat.PLAYERS_KILLED);
+			}
 		} else {
 			incrementStatistic(Statistic.MOBS_KILLED);
 			if (killer instanceof Player) {
