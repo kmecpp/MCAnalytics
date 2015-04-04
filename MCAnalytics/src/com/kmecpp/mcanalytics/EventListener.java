@@ -21,6 +21,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import com.kmecpp.mcanalytics.Statistic.PlayerStat;
 
 public class EventListener implements Listener {
+
 	public static LinkedHashMap<Statistic, Integer> statistics = new LinkedHashMap<Statistic, Integer>();
 	public static LinkedHashMap<PlayerInfo, LinkedHashMap<PlayerStat, Integer>> playerStats = new LinkedHashMap<PlayerInfo, LinkedHashMap<PlayerStat, Integer>>();
 
@@ -32,6 +33,7 @@ public class EventListener implements Listener {
 			}
 		}
 		Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin, new Runnable() {
+
 			public void run() {
 				EventListener.incrementStatistic(Statistic.SECONDS_ONLINE);
 			}
@@ -95,12 +97,15 @@ public class EventListener implements Listener {
 	public void onEntityDeath(EntityDeathEvent e) {
 		Player killer = e.getEntity().getKiller();
 		if ((e.getEntity() instanceof Player)) {
+			Player playerKilled = (Player) e.getEntity();
 			incrementStatistic(Statistic.PLAYERS_KILLED);
 			incrementPlayerStat(killer, Statistic.PlayerStat.PLAYERS_KILLED);
-			incrementPlayerStat((Player) e.getEntity(), Statistic.PlayerStat.DEATHS);
+			incrementPlayerStat(playerKilled, Statistic.PlayerStat.DEATHS);
 		} else {
 			incrementStatistic(Statistic.MOBS_KILLED);
-			incrementPlayerStat(killer, Statistic.PlayerStat.MOBS_KILLED);
+			if (killer instanceof Player) {
+				incrementPlayerStat(killer, Statistic.PlayerStat.MOBS_KILLED);
+			}
 		}
 	}
 
