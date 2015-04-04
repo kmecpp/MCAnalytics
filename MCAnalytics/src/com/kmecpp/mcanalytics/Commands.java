@@ -10,31 +10,35 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 import com.kmecpp.mcanalytics.util.NetworkingUtil;
 import com.kmecpp.mcanalytics.util.SQLUtil;
 
 public class Commands implements CommandExecutor {
+
 	public final String invalid = ChatColor.RED + "That is not a valid command! Type /stats for a list of commands";
 
 	@Override
 	public boolean onCommand(final CommandSender out, Command cmd, String commandLabel, String[] args) {
-		if ((commandLabel.equalsIgnoreCase("stats")) || (commandLabel.equalsIgnoreCase("mcstats")) || (commandLabel.equalsIgnoreCase("mca")) || (commandLabel.equalsIgnoreCase("mcanalytics"))) {
+		if ((commandLabel.equalsIgnoreCase("stats")) || (commandLabel.equalsIgnoreCase("mcstats")) || (commandLabel.equalsIgnoreCase("mca")) || (commandLabel.equalsIgnoreCase("+ Main.plugin.getName() +"))) {
 			if (args.length == 0) {
 				out.sendMessage("");
-				out.sendMessage(ChatColor.GREEN + ChatColor.BOLD.toString() + "RentrixAnalytics Commands");
+				out.sendMessage(ChatColor.GREEN + ChatColor.BOLD.toString() + Main.plugin.getName() + " Commands");
 				out.sendMessage(ChatColor.AQUA + ChatColor.BOLD.toString() + "----------------------------------------");
 				out.sendMessage("");
-				out.sendMessage(ChatColor.GREEN + "/stats view " + ChatColor.AQUA + "Views the current servers stats");
+				out.sendMessage(ChatColor.GREEN + "/stats view    " + ChatColor.AQUA + "Views the current servers stats");
 				out.sendMessage(ChatColor.GREEN + "/stats mystats " + ChatColor.AQUA + "Views your current stats");
-				out.sendMessage(ChatColor.GREEN + "/stats check <player> " + ChatColor.AQUA + "Views the specified players stats");
-				out.sendMessage(ChatColor.GREEN + "/stats local " + ChatColor.AQUA + "Displays current statistic packet info");
-				out.sendMessage(ChatColor.GREEN + "/stats submit " + ChatColor.AQUA + "Pushes current local data up to the web server");
-				out.sendMessage(ChatColor.GREEN + "/stats save " + ChatColor.AQUA + "Saves individual player data to database");
-				out.sendMessage(ChatColor.GREEN + "/stats reload " + ChatColor.AQUA + "Reloads the configuration file");
+				out.sendMessage(ChatColor.GREEN + "/stats check   " + ChatColor.AQUA + "Views the specified players stats");
+				out.sendMessage(ChatColor.GREEN + "/stats local   " + ChatColor.AQUA + "Displays current statistic packet info");
+				out.sendMessage(ChatColor.GREEN + "/stats submit  " + ChatColor.AQUA + "Pushes current local data up to the web server");
+				out.sendMessage(ChatColor.GREEN + "/stats save    " + ChatColor.AQUA + "Saves individual player data to database");
+				out.sendMessage(ChatColor.GREEN + "/stats reload  " + ChatColor.AQUA + "Reloads the configuration file");
+				out.sendMessage(ChatColor.GREEN + "/stats info    " + ChatColor.AQUA + "Displays information about the plugin");
 			} else if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("view")) {
 					Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new Runnable() {
+
 						public void run() {
 							try {
 								String statistics = NetworkingUtil.getStatistics();
@@ -55,6 +59,7 @@ public class Commands implements CommandExecutor {
 					if ((out instanceof Player)) {
 						final Player player = (Player) out;
 						Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new Runnable() {
+
 							public void run() {
 								try {
 									out.sendMessage("");
@@ -113,10 +118,19 @@ public class Commands implements CommandExecutor {
 				} else if (args[0].equalsIgnoreCase("reload")) {
 					if (out.isOp()) {
 						Main.plugin.reloadConfig();
-						out.sendMessage(ChatColor.GREEN + "RentrixAnalytics configuration file reloaded!");
+						out.sendMessage(ChatColor.GREEN + Main.plugin.getName() + " configuration file reloaded!");
 					} else {
 						out.sendMessage(ChatColor.RED + "You do not have permission to perform this command!");
 					}
+				} else if (args[0].equalsIgnoreCase("info")) {
+					out.sendMessage("");
+					out.sendMessage(ChatColor.GREEN + ChatColor.BOLD.toString() + Main.plugin.getName() + " Information");
+					out.sendMessage(ChatColor.YELLOW + "--------------------------------");
+					out.sendMessage("");
+					PluginDescriptionFile pdfFile = Main.plugin.getDescription();
+					out.sendMessage(ChatColor.GREEN + ChatColor.BOLD.toString() + "Author:  " + ChatColor.AQUA + ChatColor.BOLD + pdfFile.getAuthors().get(0));
+					out.sendMessage(ChatColor.GREEN + ChatColor.BOLD.toString() + "Version: " + ChatColor.AQUA + ChatColor.BOLD + pdfFile.getVersion());
+					out.sendMessage(ChatColor.GREEN + ChatColor.BOLD.toString() + "GitHub:  " + ChatColor.AQUA + ChatColor.BOLD + "https://github.com/kmecpp/MCAnalytics");
 				} else {
 					out.sendMessage(this.invalid);
 				}
@@ -124,6 +138,7 @@ public class Commands implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("check")) {
 					final String playerName = args[1];
 					Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, new Runnable() {
+
 						public void run() {
 							ArrayList<String> statistics = new ArrayList<String>();
 							try {
