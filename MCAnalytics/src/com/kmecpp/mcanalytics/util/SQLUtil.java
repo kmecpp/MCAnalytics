@@ -31,7 +31,6 @@ public class SQLUtil {
 					try {
 						currentValue = connection.createStatement().executeQuery(getQuery).getInt(2);
 					} catch (Exception e) {
-						e.printStackTrace();
 					}
 					postQuery.append(", '" + statistic.toString() + "'");
 
