@@ -29,7 +29,7 @@ public class SQLUtil {
 					String getQuery = "SELECT UUID," + statistic.toString() + " FROM USERDATA WHERE `UUID`= '" + playerEntry.getKey().getUniqueId().toString() + "'";
 					Integer currentValue = 0;
 					try {
-						currentValue = Integer.valueOf(connection.createStatement().executeQuery(getQuery).getInt(2));
+						currentValue = connection.createStatement().executeQuery(getQuery).getInt(2);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
