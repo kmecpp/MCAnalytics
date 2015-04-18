@@ -1,7 +1,7 @@
 name: MCAnalytics
 main: com.kmecpp.mcanalytics.Main
 author: kmecpp
-version: 1.1
+version: 1.2
 description:
    A Minecraft plugin and php script that collects statistics about a server to be displayed from anywhere
 commands:
