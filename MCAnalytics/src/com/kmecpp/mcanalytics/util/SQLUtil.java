@@ -26,11 +26,12 @@ public class SQLUtil {
 				postQueryValues.append(" VALUES (");
 				postQueryValues.append("'" + ((PlayerInfo) playerEntry.getKey()).getUniqueId() + "', '" + ((PlayerInfo) playerEntry.getKey()).getName() + "'");
 				for (Statistic.PlayerStat statistic : Statistic.PlayerStat.values()) {
-					String getQuery = "SELECT UUID," + statistic.toString() + " FROM USERDATA WHERE `UUID`= '" + ((PlayerInfo) playerEntry.getKey()).toString() + "'";
-					Integer currentValue = Integer.valueOf(0);
+					String getQuery = "SELECT UUID," + statistic.toString() + " FROM USERDATA WHERE `UUID`= '" + playerEntry.getKey().getUniqueId().toString() + "'";
+					Integer currentValue = 0;
 					try {
 						currentValue = Integer.valueOf(connection.createStatement().executeQuery(getQuery).getInt(2));
-					} catch (Exception localException) {
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 					postQuery.append(", '" + statistic.toString() + "'");
 
