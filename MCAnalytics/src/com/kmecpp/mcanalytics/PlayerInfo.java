@@ -38,7 +38,7 @@ public class PlayerInfo {
 	@Override
 	public int hashCode() {
 		int hashCode = 31 + (this.uuid != null ? this.uuid.hashCode() : 0);
-		hashCode += 31 * (this.uuid != null ? this.name.hashCode() : 0);
+		hashCode += 31 * (this.name != null ? this.name.hashCode() : 0);
 		return hashCode;
 	}
 }
