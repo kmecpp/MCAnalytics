@@ -4,8 +4,6 @@ header('Content-Type: application/json');
 $url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $url = substr($url, 0, strrpos($url, "/", 0)) . "/";
 
-// TODO REMOVE: http://localhost/eclipse/MCAnalytics/statistics.php?key=null&uniquePlayers=4&playerJoins=5&playersKilled=6&mobsKilled=2&chatMessages=65&blocksBroken=34&blocksPlaced=677&blocksTraveled=56&itemsDropped=333&inventoriesOpened=454&chunksLoaded=332&secondsOnline=34&serverRestarts=2&statsCollected=1
-
 $authKey = null;
 $error = null;
 $values = array ();
@@ -88,7 +86,6 @@ else if (!empty($_GET["color"])) {
 	if ($color != "null" && !$prettyDisplay) {
 		addHtml("<font color=\"" . $color . "\">");
 	}
-	// addHtml(var_dump($args)) - Nested functions cause upper level ones to run before disregarding line number?????
 	foreach (getStatistics() as $key => $value) {
 		if ($key != "key") {
 			$mask = "ABCDEFGHJIJKLMNOPQRSTUVWXYZ";
