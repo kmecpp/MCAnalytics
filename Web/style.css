@@ -1,0 +1,40 @@
+.refresh {
+	display: inline-block;
+	float: right;
+	color: rgb(200, 0, 0);
+	background: 5px rgb(0, 0, 0);
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.statistic {
+	display: inline-block;
+	font-weight: bold;
+}
+
+.value {
+	display: inline-block;
+	text-align: center;
+	background: rgb(0, 180, 0);
+	border: 3px solid rgba(0, 50, 0, 0.6);
+	border-radius: 10px;
+	padding-left: 3px;
+	padding-right: 3px;
+	margin-right: 10px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	font-weight: bold;
+}
+
+.value:hover {
+	background: rgb(0, 200, 0);
+}
+
+a.value {
+	color: rgb(230, 230, 230);
+	text-decoration: none;
+}
+
+a.value:hover {
+	color: rgb(255, 255, 255);
+}

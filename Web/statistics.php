@@ -1,7 +1,10 @@
 <?php
+require "config.php";
 header('Content-Type: application/json');
 $url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $url = substr($url, 0, strrpos($url, "/", 0)) . "/";
+
+// TODO REMOVE: http://localhost/eclipse/MCAnalytics/statistics.php?key=null&uniquePlayers=4&playerJoins=5&playersKilled=6&mobsKilled=2&chatMessages=65&blocksBroken=34&blocksPlaced=677&blocksTraveled=56&itemsDropped=333&inventoriesOpened=454&chunksLoaded=332&secondsOnline=34&serverRestarts=2&statsCollected=1
 
 $authKey = null;
 $error = null;
@@ -53,6 +56,11 @@ if (!empty($_GET["key"])) {
 						if ($key != "uniquePlayers" && $key != "serverTps") {
 							$value = $value + (int) $values[$key];
 						} else {
+							if ($key == "serverTps" && (int) $values[$key] < 14 && (int) $value < 14) {
+								if ($email != null) {
+									mail($email, "MCAnalytics Server TPS Alert", "The tick rate on the server dropped below 14! It is currently at " . $values[$key]);
+								}
+							}
 							$value = (int) $values[$key];
 						}
 						fwrite($handle, $value);
@@ -67,8 +75,17 @@ if (!empty($_GET["key"])) {
 }  // GETTING DATA
 else if (!empty($_GET["color"])) {
 	header('Content-Type: text/html');
-	$color = $_GET['color'];
-	if ($color != "null") {
+	$color = $_GET["color"];
+	$prettyDisplay = false;
+	if (!empty($_GET["pretty"])) {
+		$prettyDisplay = filter_var($_GET["pretty"], FILTER_VALIDATE_BOOLEAN);
+		if ($prettyDisplay) {
+			addHtml("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js\"></script>");
+			addHtml("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">");
+			addHtml("<font size=\"" . $font_size . "\"><a href=\"\" class=\"refresh\">Refresh</font>");
+		}
+	}
+	if ($color != "null" && !$prettyDisplay) {
 		addHtml("<font color=\"" . $color . "\">");
 	}
 	// addHtml(var_dump($args)) - Nested functions cause upper level ones to run before disregarding line number?????
@@ -79,9 +96,14 @@ else if (!empty($_GET["color"])) {
 			$firstWord = substr($key, 0, $pos);
 			$secondWord = substr($key, $pos);
 			if ($secondWord == "Tps") {
-				$secondWord = "TPS";
+				$firstWord = "TPS";
+				$secondWord = "";
 			}
-			addHtml(ucfirst($firstWord) . " " . $secondWord . ": " . number_format($value) . "<br>");
+			if ($prettyDisplay) {
+				addHtml("<font color=\"" . $color . "\" size=\"" . $font_size . "\"><a href=\"#\" class=\"value\"> " . number_format($value) . "</a><div class=\"statistic\">  " . ucfirst($firstWord) . " " . $secondWord . "</div></font><br>");
+			} else {
+				addHtml(ucfirst($firstWord) . " " . $secondWord . ": " . number_format($value) . "<br>");
+			}
 		}
 	}
 } else {
