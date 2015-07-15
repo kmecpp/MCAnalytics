@@ -1,11 +1,13 @@
 package com.kmecpp.mcanalytics;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.kmecpp.mcanalytics.metrics.Metrics;
 import com.kmecpp.mcanalytics.util.NetworkingUtil;
 import com.kmecpp.mcanalytics.util.SQLUtil;
 
@@ -14,11 +16,20 @@ public class Main extends JavaPlugin {
 	public static Main plugin;
 
 	@Override
-	public void onEnable() {
+	public void onLoad() {
 		plugin = this;
+	}
+
+	@Override
+	public void onEnable() {
+		//Configuration
 		saveDefaultConfig();
+
+		//Commands/Listeners
 		getCommand("mcanalytics").setExecutor(new Commands());
 		new EventListener();
+
+		//Statistics
 		initializeDatabase();
 		Bukkit.getScheduler().runTaskTimer(plugin, new TPS(), 100L, 1L);
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
@@ -26,6 +37,13 @@ public class Main extends JavaPlugin {
 				saveStatistics();
 			}
 		}, 0L, 1200L);
+
+		//Metrics
+		try {
+			Metrics metrics = new Metrics(this);
+			metrics.start();
+		} catch (IOException e) {
+		}
 	}
 
 	@Override
