@@ -2,6 +2,7 @@ package com.kmecpp.mcanalytics;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,10 +30,17 @@ public class Main extends JavaPlugin {
 		getCommand("mcanalytics").setExecutor(new Commands());
 		new EventListener();
 
-		//Statistics
-		initializeDatabase();
+		//Database
+		try {
+			SQLUtil.getConnection().close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		//Tasks
 		Bukkit.getScheduler().runTaskTimer(plugin, new TPS(), 100L, 1L);
 		Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+			@Override
 			public void run() {
 				saveStatistics();
 			}
@@ -48,7 +56,7 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		Bukkit.broadcastMessage(ChatColor.GREEN + "Finializing MCAnalytics statistics data...");
+		Bukkit.broadcastMessage(ChatColor.GREEN + "Finalizing " + Main.plugin.getName() + " statistics data...");
 		saveStatistics();
 	}
 
@@ -56,22 +64,18 @@ public class Main extends JavaPlugin {
 		try {
 			NetworkingUtil.submitStatistics();
 		} catch (Exception e) {
-			Bukkit.getLogger().warning("[" + Main.plugin.getDescription().getName() + "]" + "Failed to submit global statistics! (Check your config or website)");
+			Main.log(Level.WARNING, "Failed to submit global statistics! (Check your config or website)");
 			e.printStackTrace();
 		}
 		try {
 			SQLUtil.saveStatistics();
 		} catch (Exception e) {
-			Bukkit.getLogger().warning("[" + Main.plugin.getDescription().getName() + "]" + "Failed to save player statistics");
+			Main.log(Level.WARNING, "Failed to save player statistics!");
 			e.printStackTrace();
 		}
 	}
 
-	public static void initializeDatabase() {
-		try {
-			SQLUtil.getConnection().close();
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
+	public static void log(Level level, String message) {
+		Bukkit.getLogger().log(level, "[" + Main.plugin.getName() + "] " + message);
 	}
 }

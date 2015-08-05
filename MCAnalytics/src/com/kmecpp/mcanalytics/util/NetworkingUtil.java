@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Level;
 
 import com.kmecpp.mcanalytics.EventListener;
 import com.kmecpp.mcanalytics.Main;
@@ -35,19 +36,19 @@ public class NetworkingUtil {
 			URL url = new URL(configUrl + "?color=null");
 			return createConnection(url);
 		}
-		System.err.println("RentrixAnalytics URL value not set in config!");
+		Main.log(Level.SEVERE, "URL value not set in config!");
 		return null;
 	}
 
 	public static void submitStatistics() throws IOException {
 		String configUrl = Main.plugin.getConfig().getString("url");
 		if (!configUrl.equalsIgnoreCase("null")) {
-			EventListener.statistics.put(Statistic.STATS_COLLECTED, Integer.valueOf(1));
+			EventListener.statistics.put(Statistic.STATS_COLLECTED, 1);
 			URL url = new URL(configUrl + getUrlParams());
 			createConnection(url);
 			EventListener.clearStatistics();
 		} else {
-			System.err.println("RentrixAnalytics URL value not set in config!");
+			Main.log(Level.SEVERE, "URL value not set in config!");
 		}
 	}
 

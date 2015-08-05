@@ -29,7 +29,7 @@ public class EventListener implements Listener {
 		Main.plugin.getServer().getPluginManager().registerEvents(this, Main.plugin);
 		for (Statistic stat : Statistic.values()) {
 			if (stat != Statistic.KEY) {
-				statistics.put(stat, Integer.valueOf(-1));
+				statistics.put(stat, -1);
 			}
 		}
 		Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin, new Runnable() {
@@ -44,26 +44,26 @@ public class EventListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		incrementStatistic(Statistic.PLAYER_JOINS);
 		if (!e.getPlayer().hasPlayedBefore()) {
-			statistics.put(Statistic.UNIQUE_PLAYERS, Integer.valueOf(Bukkit.getOfflinePlayers().length));
+			statistics.put(Statistic.UNIQUE_PLAYERS, Bukkit.getOfflinePlayers().length);
 		}
 	}
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		incrementStatistic(Statistic.BLOCKS_BROKEN);
-		incrementPlayerStat(e.getPlayer(), Statistic.PlayerStat.BLOCKS_BROKEN);
+		incrementPlayerStat(e.getPlayer(), PlayerStat.BLOCKS_BROKEN);
 	}
 
 	@EventHandler
 	public void onBlockPlaceEvent(BlockPlaceEvent e) {
 		incrementStatistic(Statistic.BLOCKS_PLACED);
-		incrementPlayerStat(e.getPlayer(), Statistic.PlayerStat.BLOCKS_PLACED);
+		incrementPlayerStat(e.getPlayer(), PlayerStat.BLOCKS_PLACED);
 	}
 
 	@EventHandler
 	public void onAsyncChat(AsyncPlayerChatEvent e) {
 		incrementStatistic(Statistic.CHAT_MESSAGES);
-		incrementPlayerStat(e.getPlayer(), Statistic.PlayerStat.CHAT_MESSAGES);
+		incrementPlayerStat(e.getPlayer(), PlayerStat.CHAT_MESSAGES);
 	}
 
 	@EventHandler
@@ -72,7 +72,7 @@ public class EventListener implements Listener {
 		for (String command : commands) {
 			if (e.getMessage().toLowerCase().startsWith(command.toLowerCase())) {
 				incrementStatistic(Statistic.CHAT_MESSAGES);
-				incrementPlayerStat(e.getPlayer(), Statistic.PlayerStat.CHAT_MESSAGES);
+				incrementPlayerStat(e.getPlayer(), PlayerStat.CHAT_MESSAGES);
 				break;
 			}
 		}
@@ -99,14 +99,14 @@ public class EventListener implements Listener {
 		if ((e.getEntity() instanceof Player)) {
 			Player playerKilled = (Player) e.getEntity();
 			incrementStatistic(Statistic.PLAYERS_KILLED);
-			incrementPlayerStat(playerKilled, Statistic.PlayerStat.DEATHS);
+			incrementPlayerStat(playerKilled, PlayerStat.DEATHS);
 			if (killer instanceof Player) {
-				incrementPlayerStat(killer, Statistic.PlayerStat.PLAYERS_KILLED);
+				incrementPlayerStat(killer, PlayerStat.PLAYERS_KILLED);
 			}
 		} else {
 			incrementStatistic(Statistic.MOBS_KILLED);
 			if (killer instanceof Player) {
-				incrementPlayerStat(killer, Statistic.PlayerStat.MOBS_KILLED);
+				incrementPlayerStat(killer, PlayerStat.MOBS_KILLED);
 			}
 		}
 	}
@@ -115,38 +115,38 @@ public class EventListener implements Listener {
 	public void onPlayerMove(PlayerMoveEvent e) {
 		if (((int) e.getFrom().getX() != (int) e.getTo().getX()) || ((int) e.getFrom().getY() != (int) e.getTo().getY()) || ((int) e.getFrom().getZ() != (int) e.getTo().getZ())) {
 			incrementStatistic(Statistic.BLOCKS_TRAVELED);
-			incrementPlayerStat(e.getPlayer(), Statistic.PlayerStat.BLOCKS_TRAVELED);
+			incrementPlayerStat(e.getPlayer(), PlayerStat.BLOCKS_TRAVELED);
 		}
 	}
 
 	public static void incrementStatistic(Statistic statistic) {
 		if (((Integer) statistics.get(statistic)).intValue() != -1) {
-			statistics.put(statistic, Integer.valueOf(((Integer) statistics.get(statistic)).intValue() + 1));
+			statistics.put(statistic, ((Integer) statistics.get(statistic)).intValue() + 1);
 		} else {
-			statistics.put(statistic, Integer.valueOf(1));
+			statistics.put(statistic, 1);
 		}
 	}
 
-	public static void incrementPlayerStat(Player player, Statistic.PlayerStat statistic) {
+	public static void incrementPlayerStat(Player player, PlayerStat statistic) {
 		UUID uuid = player.getUniqueId();
 		PlayerInfo playerInfo = new PlayerInfo(uuid, player.getName());
 		if ((playerStats.containsKey(playerInfo)) && ((playerStats.get(playerInfo)).containsKey(statistic)) && ((playerStats.get(playerInfo)).get(statistic)).intValue() != -1) {
-			LinkedHashMap<Statistic.PlayerStat, Integer> newValue = playerStats.get(playerInfo);
-			newValue.put(statistic, Integer.valueOf(((Integer) newValue.get(statistic)).intValue() + 1));
+			LinkedHashMap<PlayerStat, Integer> newValue = playerStats.get(playerInfo);
+			newValue.put(statistic, ((Integer) newValue.get(statistic)) + 1);
 			playerStats.put(new PlayerInfo(uuid, player.getName()), newValue);
 		} else {
-			LinkedHashMap<Statistic.PlayerStat, Integer> newValue = new LinkedHashMap<Statistic.PlayerStat, Integer>();
+			LinkedHashMap<PlayerStat, Integer> newValue = new LinkedHashMap<PlayerStat, Integer>();
 			if (playerStats.containsKey(playerInfo)) {
 				newValue = playerStats.get(playerInfo);
 			}
-			newValue.put(statistic, Integer.valueOf(1));
+			newValue.put(statistic, 1);
 			playerStats.put(new PlayerInfo(uuid, player.getName()), newValue);
 		}
 	}
 
 	public static void clearStatistics() {
 		for (Statistic stat : statistics.keySet()) {
-			statistics.put(stat, Integer.valueOf(-1));
+			statistics.put(stat, -1);
 		}
 	}
 
